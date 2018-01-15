@@ -2,28 +2,28 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
-  <object class="GtkListStore" id="liststore1">
+  <object class="GtkListStore" id="listaClientes">
     <columns>
-      <!-- column-name DNI -->
+      <!-- column-name dni -->
       <column type="gchararray"/>
-      <!-- column-name Nombre -->
+      <!-- column-name nombre -->
       <column type="gchararray"/>
-      <!-- column-name Apellido -->
+      <!-- column-name apellido -->
       <column type="gchararray"/>
-      <!-- column-name Dirección -->
+      <!-- column-name direccion -->
       <column type="gchararray"/>
-      <!-- column-name Email -->
+      <!-- column-name telefono -->
       <column type="gchararray"/>
-      <!-- column-name Teléfono -->
+      <!-- column-name localidad -->
       <column type="gchararray"/>
-      <!-- column-name Localidad -->
+      <!-- column-name email -->
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkWindow" id="window1">
-    <property name="width_request">500</property>
+  <object class="GtkWindow" id="idVentanaPrincipal">
+    <property name="width_request">520</property>
     <property name="can_focus">False</property>
-    <property name="type">popup</property>
+    <property name="opacity">0.93000000000000005</property>
     <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
@@ -127,7 +127,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry1">
+                  <object class="GtkEntry" id="idDni">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
@@ -138,7 +138,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry2">
+                  <object class="GtkEntry" id="idNombre">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
@@ -149,7 +149,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry3">
+                  <object class="GtkEntry" id="idApellido">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
@@ -160,7 +160,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry4">
+                  <object class="GtkEntry" id="idDireccion">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
@@ -171,7 +171,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry5">
+                  <object class="GtkEntry" id="idLocalidad">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
@@ -182,7 +182,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry6">
+                  <object class="GtkEntry" id="idTelefono">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
@@ -193,7 +193,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry7">
+                  <object class="GtkEntry" id="idEmail">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
@@ -264,6 +264,7 @@
                 <property name="margin_left">50</property>
                 <property name="margin_right">50</property>
                 <property name="yalign">0.44999998807907104</property>
+                <signal name="clicked" handler="on_btnAlta_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -271,7 +272,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btnSalir">
+              <object class="GtkButton" id="btnBaja">
                 <property name="label" translatable="yes">Salir</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -279,6 +280,7 @@
                 <property name="margin_left">50</property>
                 <property name="margin_right">50</property>
                 <property name="resize_mode">immediate</property>
+                <signal name="clicked" handler="on_btnBaja_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -312,10 +314,10 @@
             <property name="shadow_type">in</property>
             <property name="overlay_scrolling">False</property>
             <child>
-              <object class="GtkTreeView" id="treeview3">
+              <object class="GtkTreeView" id="idListaCliente">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="model">liststore1</property>
+                <property name="model">listaClientes</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection3"/>
                 </child>
@@ -380,7 +382,7 @@
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext5"/>
                       <attributes>
-                        <attribute name="text">4</attribute>
+                        <attribute name="text">6</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -393,7 +395,7 @@
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext6"/>
                       <attributes>
-                        <attribute name="text">5</attribute>
+                        <attribute name="text">4</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -406,7 +408,7 @@
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext7"/>
                       <attributes>
-                        <attribute name="text">6</attribute>
+                        <attribute name="text">5</attribute>
                       </attributes>
                     </child>
                   </object>
