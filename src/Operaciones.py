@@ -1,12 +1,12 @@
  
  
  
-def limpiarc(idDni,idNombre,idApellido,idDireccion,idEmail,idTelefono,idLocalidad):
-        idDni.set_text("")
-        idNombre.set_text("")
-        idApellido.set_text("")
-        idDireccion.set_text("")
-        idLocalidad.set_text("")
-        idTelefono.set_text("")
-        idEmail.set_text("")
+def limpiarc(self):
+        self.idDni.set_text("")
+        self.idNombre.set_text("")
+        self.idApellido.set_text("")
+        self.idDireccion.set_text("")
+        self.idLocalidad.set_text("")
+        self.idTelefono.set_text("")
+        self.idEmail.set_text("")
  

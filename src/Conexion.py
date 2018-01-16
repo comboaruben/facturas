@@ -12,11 +12,29 @@ except:
 def insertarc(fila):
     try: 
         registro = fila
-        cur.execute("insert into Cliente(dni,nombre,apellido,direccion,email,telefono,localidad) values (?,?,?,?,?,?,?)",registro)
+        cur.execute("insert into Cliente(dni,nombre,apellido,direccion,telefono,localidad,email) values (?,?,?,?,?,?,?)",registro)
         print('insertado')
         conex.commit()
     except:
         print("hubo un error alta clientes")
+        conex.rollback()
+        
+def bajac(var):  
+    try:
+        dni=var
+        cur.execute("delete from Cliente where dni=?",(dni,))
+        conex.commit()
+    except:
+        print ("Problemas con el borrado")
+        conex.rollback()
+        
+def modificac(dni,nombre,apellido,direccion,telefono,localidad,email):
+    try:
+        
+        cur.execute("update Cliente set nombre=?, apellido=?, direccion=?, telefono=?, localidad=?, email=? WHERE dni=?", (nombre,apellido,direccion,telefono,localidad,email,dni))
+        conex.commit()
+    except:
+        print("hubo un error en modificar clientes")
         conex.rollback()
         
 def listarc():
