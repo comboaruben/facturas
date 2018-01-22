@@ -47,20 +47,85 @@ class factura():
         #listStore y treeView
         self.listaFactura=b.get_object("listaFactura")
         self.idTreeFactura=b.get_object("idTreeFactura")
+        #---------Producto---------
+        self.idNombreProducto=b.get_object("idNombreProducto")
+        self.idPrecioProducto=b.get_object("idPrecioProducto")
+        self.idStockProducto=b.get_object("idStockProducto")
+        #botones
+        self.btnAltaProducto=b.get_object("btnAltaProducto")
+        self.btnModificarProducto=b.get_object("btnModificarProducto")
+        self.btnBajaProducto=b.get_object("btnBajaProducto")
+        #listStore y treeView
+        self.listaProducto=b.get_object("listaProducto")
+        self.idTreeProducto=b.get_object("idTreeProducto")
+        
         dic={"on_btnBaja_clicked":self.bajaCliente,"on_btnAlta_clicked":self.altaCliente,"on_idtreeCLiente_cursor_changed":self.cargarCLiente,
-        "on_btnModificar_clicked":self.modificarCliente,"on_btnIniciarFactura_clicked":self.altaFactura,"on_btnBorrarFactura_clicked":self.bajaFactura,}
+        "on_btnModificar_clicked":self.modificarCliente,"on_btnIniciarFactura_clicked":self.altaFactura,"on_btnBorrarFactura_clicked":self.bajaFactura,
+        "on_btnAltaProducto_clicked":self.altaProducto,"on_idTreeProducto_cursor_changed":self.cargarProducto,"on_btnModificarProducto_clicked":self.modificarProducto,
+        "on_btnBajaProducto_clicked":self.bajaProducto,}
         
         
         b.connect_signals(dic)
         self.idVentanaPrincipal.show()
         self.refrescarCliente()
         self.refrescarFactura()
+        self.refrescarProducto()
+        
+    #------------PRODUCTO------------
+    def altaProducto(self,widget):
+        nombre=self.idNombreProducto.get_text()
+        idPrecioProducto=self.idPrecioProducto.get_text()
+        idStockProducto=self.idStockProducto.get_text()
+        if nombre != "" or idPrecioProducto!=""or idStockProducto!="":
+            fila=(nombre,idPrecioProducto,idStockProducto)
+            Conexion.insertarp(fila)
+            self.listaProducto.clear()
+            self.refrescarProducto()
+            Operaciones.limpiarp(self)
+            self.idinformativo.set_text("Has dado de alta el producto "+nombre+" con un stock de "+idStockProducto)
+        else :
+            self.idinformativo.set_text("Has dejado algún campo vacio compruebe y prueba de nuevo")
+    def modificarProducto(self,widget):
+        nombre=self.idNombreProducto.get_text()
+        idPrecioProducto=self.idPrecioProducto.get_text()
+        idStockProducto=self.idStockProducto.get_text()
+        if nombre != "" or idPrecioProducto!="" or idStockProducto!="":
+            Conexion.modificap(idPrecioProducto,idStockProducto,self.snombre)
+            self.listaProducto.clear()
+            self.refrescarProducto()
+            Operaciones.limpiarp(self)
+            self.idinformativo.set_text("Has modificado el producto "+nombre)
+        else :
+            self.idinformativo.set_text("Has dejado algún campo vacio compruebe y prueba de nuevo")
+    def bajaProducto(self,widget):
+        model,iter= self.idTreeProducto.get_selection().get_selected()
+        nombreProducto=model.get_value(iter,1)
+        if(nombreProducto!=""):
+            Conexion.bajap(nombreProducto)
+            self.listaProducto.clear()
+            self.refrescarProducto()
+            Operaciones.limpiarp(self)
+            self.idinformativo.set_text("Has dado de baja un producto")
+    def refrescarProducto(self):
+        lista = Conexion.listarp()
+        for registro in lista:
+            self.listaProducto.append(registro)
+    def cargarProducto(self,widget):
+        model,iter= self.idTreeProducto.get_selection().get_selected()
+        if iter!=None:
+            self.snombre=model.get_value(iter,1)
+            sprecio=model.get_value(iter,2)
+            sstock=model.get_value(iter,3)
+            self.idNombreProducto.set_text(self.snombre)
+            self.idPrecioProducto.set_text(sprecio)
+            self.idStockProducto.set_text(sstock)
+    #-------------FACTURA------------
     def altaFactura(self,widget):
         tiempo=time.strftime("%d/%m/%y")
         dni=self.dniClienteFacturacion.get_text()
         fila=(tiempo,dni)
-        Conexion.insertarf(fila);
-        self.listaFactura.clear();
+        Conexion.insertarf(fila)
+        self.listaFactura.clear()
         self.refrescarFactura()
         self.idinformativo.set_text("Has dado de alta una factura")
     def bajaFactura(self,widget):
@@ -68,7 +133,7 @@ class factura():
         nFactura=model.get_value(iter,0)
         if(nFactura!=""):
             Conexion.bajaf(nFactura)
-            self.listaFactura.clear();
+            self.listaFactura.clear()
             self.refrescarFactura()
             self.idinformativo.set_text("Has dado de baja una factura")
            
@@ -76,6 +141,7 @@ class factura():
         lista = Conexion.listarf()
         for registro in lista:
             self.listaFactura.append(registro)
+    #------------CLIENTE---------
     def altaCliente(self,widget):
         self.dni = self.idDni.get_text()
         self.nombre = self.idNombre.get_text()
@@ -91,8 +157,8 @@ class factura():
             self.refrescarCliente()
             Operaciones.limpiarc(self)
             self.idinformativo.set_text("Has dado de alta reciente a "+self.nombre+" "+self.apellido)
-        else:
-            print ("algun error")
+        else :
+            self.idinformativo.set_text("Has dejado algún campo vacio compruebe y prueba de nuevo")
     def refrescarCliente(self):
         lista = Conexion.listarc()
         for registro in lista:

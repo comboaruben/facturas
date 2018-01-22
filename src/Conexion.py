@@ -8,7 +8,7 @@ try:
 except:
     print ("Posibles errores de importacion")
   
-       
+ #-----CLIENTE-----      
 def insertarc(fila):
     try: 
         registro = fila
@@ -36,15 +36,6 @@ def modificac(dni,nombre,apellido,direccion,telefono,localidad,email):
     except:
         print("hubo un error en modificar clientes")
         conex.rollback()
-def insertarf(fila):
-    try: 
-        registro = fila
-        cur.execute("insert into Factura(dni_cliente,fecha) values (?,?)",registro)
-        print('insertado')
-        conex.commit()
-    except:
-        print("hubo un error alta clientes")
-        conex.rollback()        
 def listarc():
     try:
         cur.execute("select * from Cliente")
@@ -53,6 +44,17 @@ def listarc():
     except:
         print ("er.message en cliente")
         conex.rollback()
+    #------FACTURA----
+def insertarf(fila):
+    try: 
+        registro = fila
+        cur.execute("insert into Factura(dni_cliente,fecha) values (?,?)",registro)
+        print('insertado')
+        conex.commit()
+    except:
+        print("hubo un error alta factura")
+        conex.rollback()        
+
 def listarf():
     try:
         cur.execute("select * from Factura")
@@ -68,4 +70,38 @@ def bajaf(var):
         conex.commit()
     except:
         print ("Problemas con el borrado")
+        conex.rollback()
+#-------PRODUCTO----
+def insertarp(fila):
+    try: 
+        registro = fila
+        cur.execute("insert into Producto(nombre,precio,stock) values (?,?,?)",registro)
+        print('insertado')
+        conex.commit()
+    except:
+        print("hubo un error alta Producto")
+        conex.rollback()  
+def listarp():
+    try:
+        cur.execute("select * from Producto")
+        listado = cur.fetchall()
+        return listado
+    except:
+        print ("er.message en Factura")
+        conex.rollback() 
+def modificap(precio,stock,nombre):
+    try:
+        
+        cur.execute("update Producto set precio=?, stock=? WHERE nombre=?", (precio,stock,nombre,))
+        conex.commit()
+    except:
+        print("hubo un error en modificar clientes")
+        conex.rollback()
+def bajap(var):  
+    try:
+        nombreProducto=var
+        cur.execute("delete from Producto where nombre=?",(nombreProducto,))
+        conex.commit()
+    except:
+        print ("Problemas con el borrado en Producto")
         conex.rollback()

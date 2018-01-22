@@ -9,4 +9,8 @@ def limpiarc(self):
         self.idLocalidad.set_text("")
         self.idTelefono.set_text("")
         self.idEmail.set_text("")
+def limpiarp(self):
+        self.idNombreProducto.set_text("")
+        self.idPrecioProducto.set_text("")
+        self.idStockProducto.set_text("")
  
