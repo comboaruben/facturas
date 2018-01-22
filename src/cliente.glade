@@ -516,6 +516,7 @@
                       <object class="GtkLabel" id="idFactura">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_right">55</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -523,7 +524,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="idClienteFacturacion">
+                      <object class="GtkLabel" id="dniClienteFacturacion">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -545,14 +546,14 @@
                     <property name="can_focus">False</property>
                     <property name="column_homogeneous">True</property>
                     <child>
-                      <object class="GtkButton" id="idIniciarFactura">
+                      <object class="GtkButton" id="btnIniciarFactura">
                         <property name="label" translatable="yes">Iniciar Factura</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
-                        <signal name="clicked" handler="on_idIniciarVenta_clicked" swapped="no"/>
+                        <signal name="clicked" handler="on_btnIniciarFactura_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -560,7 +561,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="idBorrarFactura">
+                      <object class="GtkButton" id="btnBorrarFactura">
                         <property name="label" translatable="yes">Anular Factura</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -569,6 +570,7 @@
                         <property name="halign">center</property>
                         <property name="valign">center</property>
                         <property name="resize_mode">immediate</property>
+                        <signal name="clicked" handler="on_btnBorrarFactura_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -583,7 +585,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkTreeView" id="treeview1">
+                  <object class="GtkTreeView" id="idTreeFactura">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="vexpand">True</property>
@@ -594,7 +596,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn8">
-                        <property name="title" translatable="yes">NÚMERO</property>
+                        <property name="title" translatable="yes">Número</property>
                         <property name="expand">True</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext8"/>
@@ -606,7 +608,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn9">
-                        <property name="title" translatable="yes">FECHA</property>
+                        <property name="title" translatable="yes">Fecha</property>
                         <property name="expand">True</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext9"/>
@@ -618,7 +620,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn10">
-                        <property name="title" translatable="yes">DNI CLIENTE</property>
+                        <property name="title" translatable="yes">Dni Cliente</property>
                         <property name="expand">True</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext10"/>
@@ -653,8 +655,10 @@
                     </child>
                     <child>
                       <object class="GtkComboBox" id="combobox1">
+                        <property name="width_request">103</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="opacity">0.97999999999999998</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -675,7 +679,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="entry1">
+                      <object class="GtkEntry" id="idCantidad">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </object>
@@ -722,7 +726,7 @@
                     <property name="valign">center</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <object class="GtkButton" id="idGrabarVenta">
+                      <object class="GtkButton" id="btnGrabarVenta">
                         <property name="label" translatable="yes">GrabarVenta</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -736,13 +740,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="idImprimirFactura">
+                      <object class="GtkButton" id="btnImprimirFactura">
                         <property name="label" translatable="yes">ImprimirFactura</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">center</property>
                         <property name="xalign">0.56999999284744263</property>
+                        <signal name="clicked" handler="on_btnImprimirFactura_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>

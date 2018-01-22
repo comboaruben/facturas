@@ -7,6 +7,7 @@ import os
 import gi
 import Conexion
 import Operaciones
+import time
 os.environ['UBUNTU_MENUPROXY']='0'
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -33,12 +34,48 @@ class factura():
         #listStore y TreeView
         self.listaClientes=b.get_object("listaClientes")
         self.idtreeCLiente=b.get_object("idtreeCLiente")
-      
+        #----------Facturas---------
+        self.dniClienteFacturacion=b.get_object("dniClienteFacturacion")
+        self.idFactura=b.get_object("idFactura")
+        self.idCantidad=b.get_object("idCantidad")
+        self.idPrecio=b.get_object("idPrecio")
+        #botones
+        self.btnIniciarFactura=b.get_object("btnIniciarFactura")
+        self.btnBorrarFactura=b.get_object("btnBorrarFactura")
+        self.btnGrabarVenta=b.get_object("btnGrabarVenta")
+        
+        #listStore y treeView
+        self.listaFactura=b.get_object("listaFactura")
+        self.idTreeFactura=b.get_object("idTreeFactura")
         dic={"on_btnBaja_clicked":self.bajaCliente,"on_btnAlta_clicked":self.altaCliente,"on_idtreeCLiente_cursor_changed":self.cargarCLiente,
-        "on_btnModificar_clicked":self.modificarCliente,}
+        "on_btnModificar_clicked":self.modificarCliente,"on_btnIniciarFactura_clicked":self.altaFactura,"on_btnBorrarFactura_clicked":self.bajaFactura,}
+        
+        
         b.connect_signals(dic)
         self.idVentanaPrincipal.show()
         self.refrescarCliente()
+        self.refrescarFactura()
+    def altaFactura(self,widget):
+        tiempo=time.strftime("%d/%m/%y")
+        dni=self.dniClienteFacturacion.get_text()
+        fila=(tiempo,dni)
+        Conexion.insertarf(fila);
+        self.listaFactura.clear();
+        self.refrescarFactura()
+        self.idinformativo.set_text("Has dado de alta una factura")
+    def bajaFactura(self,widget):
+        model,iter= self.idTreeFactura.get_selection().get_selected()
+        nFactura=model.get_value(iter,0)
+        if(nFactura!=""):
+            Conexion.bajaf(nFactura)
+            self.listaFactura.clear();
+            self.refrescarFactura()
+            self.idinformativo.set_text("Has dado de baja una factura")
+           
+    def refrescarFactura(self):
+        lista = Conexion.listarf()
+        for registro in lista:
+            self.listaFactura.append(registro)
     def altaCliente(self,widget):
         self.dni = self.idDni.get_text()
         self.nombre = self.idNombre.get_text()
@@ -77,6 +114,8 @@ class factura():
             self.idLocalidad.set_text(slocalidad)
             self.idTelefono.set_text(stelefono)
             self.idEmail.set_text(semail)
+            #dni que lo metemos en la vista de facturación
+            self.dniClienteFacturacion.set_text(sdni)
             
 
                 

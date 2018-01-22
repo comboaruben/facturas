@@ -36,7 +36,15 @@ def modificac(dni,nombre,apellido,direccion,telefono,localidad,email):
     except:
         print("hubo un error en modificar clientes")
         conex.rollback()
-        
+def insertarf(fila):
+    try: 
+        registro = fila
+        cur.execute("insert into Factura(dni_cliente,fecha) values (?,?)",registro)
+        print('insertado')
+        conex.commit()
+    except:
+        print("hubo un error alta clientes")
+        conex.rollback()        
 def listarc():
     try:
         cur.execute("select * from Cliente")
@@ -44,4 +52,20 @@ def listarc():
         return listado
     except:
         print ("er.message en cliente")
+        conex.rollback()
+def listarf():
+    try:
+        cur.execute("select * from Factura")
+        listado = cur.fetchall()
+        return listado
+    except:
+        print ("er.message en Factura")
+        conex.rollback()  
+def bajaf(var):  
+    try:
+        factura=var
+        cur.execute("delete from Factura where num_factura=?",(factura,))
+        conex.commit()
+    except:
+        print ("Problemas con el borrado")
         conex.rollback()
