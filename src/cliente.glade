@@ -59,7 +59,7 @@
       <!-- column-name precio -->
       <column type="gchararray"/>
       <!-- column-name stock -->
-      <column type="gchararray"/>
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkWindow" id="idVentanaPrincipal">
@@ -949,6 +949,21 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkButton" id="btnBorrarVenta">
+                        <property name="label" translatable="yes">BorrarVenta</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">center</property>
+                        <signal name="clicked" handler="on_btnBorrarVenta_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkButton" id="btnImprimirFactura">
                         <property name="label" translatable="yes">ImprimirFactura</property>
                         <property name="visible">True</property>
@@ -961,7 +976,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
@@ -1008,9 +1023,9 @@
                         <property name="title" translatable="yes">IDFactura</property>
                         <property name="expand">True</property>
                         <child>
-                          <object class="GtkCellRendererAccel" id="cellrendereraccel1"/>
+                          <object class="GtkCellRendererText" id="cellrendereraccel1"/>
                           <attributes>
-                            <attribute name="accel-key">1</attribute>
+                            <attribute name="text">1</attribute>
                           </attributes>
                         </child>
                       </object>

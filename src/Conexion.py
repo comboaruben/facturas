@@ -79,7 +79,30 @@ def insertarV(fila):
     except:
         print("hubo un error alta factura")
         conex.rollback()        
-
+def bajaV(idVenta,producto,sumarStock):  
+    try:
+        
+        cur.execute("delete from Ventas where num_ventas=?",(idVenta,))
+        cur.execute("select stock from Producto WHERE id_producto=?",(producto,))
+        listado = cur.fetchall()
+        
+        for row in listado:
+            stockActual=row[0]
+            stockReal=int(sumarStock)+int(stockActual)
+            print (stockReal)
+        cur.execute("update Producto set stock=? WHERE id_producto=?", (stockReal,producto))
+        
+        conex.commit()
+    except :
+        conex.rollback()
+def actualizarP(id,stockReal):
+    try:
+        
+        cur.execute("update Producto set stock=? WHERE id_producto=?", (stockReal,id))
+        conex.commit()
+    except:
+        print("hubo un error en modificar Producto")
+        conex.rollback()
 def insertarf(fila):
     try: 
         registro = fila
@@ -102,6 +125,13 @@ def bajaf(var):
     try:
         factura=var
         cur.execute("delete from Factura where num_factura=?",(factura,))
+        cur.execute("select sum(cantidad)from Ventas where id_facturas=?",(factura))
+        listado=cur.fetchall()
+        
+        for row in listado:
+            stockActual=row[0]
+            stockReal=int(sumarStock)+int(stockActual)
+            print (stockReal)
         conex.commit()
     except:
         print ("Problemas con el borrado")
