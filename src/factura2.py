@@ -79,6 +79,7 @@ class factura():
         self.refrescarProducto()
         self.refrescarCmbProducto()
         self.siClickEnFactura=1
+        
        #prueba
     
     #------------PRODUCTO------------
@@ -133,7 +134,7 @@ class factura():
             sstock=model.get_value(iter,3)
             self.idNombreProducto.set_text(self.snombre)
             self.idPrecioProducto.set_text(sprecio)
-            self.idStockProducto.set_text(sstock)
+            self.idStockProducto.set_text(str(sstock))
     #-------------FACTURA------------
         #-----ComboProducto----------
     def cargaCmbProducto(self,widget):
@@ -199,7 +200,7 @@ class factura():
         else:
             self.idinformativo.set_text("Primero seleccionada una venta")
         #------------------------------------------
-    def cargarFactura(self,widget):
+    def cargarFactura(self,widget,data=None):
         model,iter= self.idTreeFactura.get_selection().get_selected()
         self.numeroFactura=model.get_value(iter,0)
         self.siClickEnFactura=0;
@@ -224,8 +225,11 @@ class factura():
         nFactura=model.get_value(iter,0)
         if(nFactura!=""):
             Conexion.bajaf(nFactura)
+            self.listVentaProducto.clear()
             self.listaFactura.clear()
             self.refrescarFactura()
+            self.listaProducto.clear()
+            self.refrescarProducto()
             self.idinformativo.set_text("Has dado de baja una factura")
            
     def refrescarFactura(self):

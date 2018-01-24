@@ -84,14 +84,9 @@ def bajaV(idVenta,producto,sumarStock):
         
         cur.execute("delete from Ventas where num_ventas=?",(idVenta,))
         cur.execute("select stock from Producto WHERE id_producto=?",(producto,))
-        listado = cur.fetchall()
-        
-        for row in listado:
-            stockActual=row[0]
-            stockReal=int(sumarStock)+int(stockActual)
-            print (stockReal)
+        stockActual = cur.fetchone()
+        stockReal=int(sumarStock)+int(stockActual[0])
         cur.execute("update Producto set stock=? WHERE id_producto=?", (stockReal,producto))
-        
         conex.commit()
     except :
         conex.rollback()
@@ -124,17 +119,39 @@ def listarf():
 def bajaf(var):  
     try:
         factura=var
-        cur.execute("delete from Factura where num_factura=?",(factura,))
-        cur.execute("select sum(cantidad)from Ventas where id_facturas=?",(factura))
+        cur.execute("select id_producto,sum(cantidad),num_ventas from Ventas where id_facturas=? group by id_producto",(factura,))
         listado=cur.fetchall()
-        
-        for row in listado:
-            stockActual=row[0]
-            stockReal=int(sumarStock)+int(stockActual)
-            print (stockReal)
+        a=0
+        b=len(listado)
+        c=0
+        list=[]
+        while(c<b-1):
+            c=0
+            
+            list=[]
+            for row in listado:
+                list.append(listado[a][c])
+                c=c+1;
+            print(list)
+            idProducto=list[0]
+            stockSumar=list[1]
+            idVenta=list[2]
+            print(idProducto)
+            print(stockSumar)
+            print(idVenta)
+            cur.execute("select stock from Producto WHERE id_producto=?",(idProducto,))
+            stockActual = cur.fetchone()
+            stockReal = int(stockSumar)+int(stockActual[0])
+            print(stockActual)
+            print(stockReal)
+            cur.execute("update Producto set stock=? WHERE id_producto=?", (stockReal,idProducto,))
+            cur.execute("delete from Ventas where num_ventas=?",(idVenta,))
+            a=a+1
+        cur.execute("delete from Factura where num_factura=?",(factura,))
         conex.commit()
-    except:
-        print ("Problemas con el borrado")
+    except Exception as e:
+        print(e)
+        print("ok")
         conex.rollback()
 #-------PRODUCTO----
 def insertarp(fila):
