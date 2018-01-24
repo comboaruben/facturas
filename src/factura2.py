@@ -43,7 +43,10 @@ class factura():
         self.btnIniciarFactura=b.get_object("btnIniciarFactura")
         self.btnBorrarFactura=b.get_object("btnBorrarFactura")
         self.btnGrabarVenta=b.get_object("btnGrabarVenta")
-        
+        #combo y listcombo
+        self.cmbProducto=b.get_object("cmbProducto")
+        self.listCmbProducto=b.get_object("listCmbProducto")
+        self.listVentaProducto=b.get_object("listVentaProducto")
         #listStore y treeView
         self.listaFactura=b.get_object("listaFactura")
         self.idTreeFactura=b.get_object("idTreeFactura")
@@ -62,7 +65,8 @@ class factura():
         dic={"on_btnBaja_clicked":self.bajaCliente,"on_btnAlta_clicked":self.altaCliente,"on_idtreeCLiente_cursor_changed":self.cargarCLiente,
         "on_btnModificar_clicked":self.modificarCliente,"on_btnIniciarFactura_clicked":self.altaFactura,"on_btnBorrarFactura_clicked":self.bajaFactura,
         "on_btnAltaProducto_clicked":self.altaProducto,"on_idTreeProducto_cursor_changed":self.cargarProducto,"on_btnModificarProducto_clicked":self.modificarProducto,
-        "on_btnBajaProducto_clicked":self.bajaProducto,}
+        "on_btnBajaProducto_clicked":self.bajaProducto,"on_cmbProducto_changed":self.cargaCmbProducto,
+        "on_btnGrabarVenta_clicked":self.altaVentaProducto,"on_idTreeFactura_cursor_changed":self.cargarFactura,}
         
         
         b.connect_signals(dic)
@@ -70,6 +74,7 @@ class factura():
         self.refrescarCliente()
         self.refrescarFactura()
         self.refrescarProducto()
+        self.refrescarCmbProducto()
         
     #------------PRODUCTO------------
     def altaProducto(self,widget):
@@ -81,6 +86,7 @@ class factura():
             Conexion.insertarp(fila)
             self.listaProducto.clear()
             self.refrescarProducto()
+            self.refrescarCmbProducto()
             Operaciones.limpiarp(self)
             self.idinformativo.set_text("Has dado de alta el producto "+nombre+" con un stock de "+idStockProducto)
         else :
@@ -93,6 +99,7 @@ class factura():
             Conexion.modificap(idPrecioProducto,idStockProducto,self.snombre)
             self.listaProducto.clear()
             self.refrescarProducto()
+            self.refrescarCmbProducto()
             Operaciones.limpiarp(self)
             self.idinformativo.set_text("Has modificado el producto "+nombre)
         else :
@@ -104,6 +111,7 @@ class factura():
             Conexion.bajap(nombreProducto)
             self.listaProducto.clear()
             self.refrescarProducto()
+            self.refrescarCmbProducto()
             Operaciones.limpiarp(self)
             self.idinformativo.set_text("Has dado de baja un producto")
     def refrescarProducto(self):
@@ -120,14 +128,59 @@ class factura():
             self.idPrecioProducto.set_text(sprecio)
             self.idStockProducto.set_text(sstock)
     #-------------FACTURA------------
+        #-----ComboProducto----------
+    def cargaCmbProducto(self,widget):
+        index = self.cmbProducto.get_active()
+        model =self.cmbProducto.get_model()
+        self.nombre=model[index][0]
+        
+        listado=Conexion.cargarCmbP(self.nombre)
+        for row in listado:
+            self.idProducto=row[0]
+            self.nombre=row[1]
+            self.idPrecio.set_text(row[2])
+            self.stock=row[3]
+        #--------------------------------
+        #-------Lista venta------------
+    def altaVentaProducto(self,widget,data=None):
+        stockPide=int(self.idCantidad.get_text())
+        stockReal= int(self.stock)-int(stockPide)
+        print (stockPide)
+        print (stockReal)
+        if stockReal>=0 and stockPide>=1:
+            precioReal=float(stockPide)*float(self.idPrecio.get_text())
+            print (self.numeroFactura)
+            fila=(self.numeroFactura,int(self.idProducto),int(stockPide),int(precioReal))
+            Conexion.insertarV(fila)
+            self.listaProducto.clear()
+            self.refrescarVenta()
+        else:
+             self.idinformativo.set_text("No puedes pedir tanto de ese producto")
+    def refrescarVenta(self):
+        print (self.numeroFactura)
+        lista = Conexion.listarV(self.numeroFactura)
+        for registro in lista:
+            self.listVentaProducto.append(registro)
+    def refrescarCmbProducto(self):
+        lista = Conexion.listarCmbP()
+        for registro in lista:
+            self.listCmbProducto.append(registro)
+    def cargarFactura(self,widget):
+        model,iter= self.idTreeFactura.get_selection().get_selected()
+        self.numeroFactura=model.get_value(iter,0)
+        print (self.numeroFactura)
+        #---------------------
     def altaFactura(self,widget):
         tiempo=time.strftime("%d/%m/%y")
         dni=self.dniClienteFacturacion.get_text()
-        fila=(tiempo,dni)
-        Conexion.insertarf(fila)
-        self.listaFactura.clear()
-        self.refrescarFactura()
-        self.idinformativo.set_text("Has dado de alta una factura")
+        if dni!="":
+            fila=(tiempo,dni)
+            Conexion.insertarf(fila)
+            self.listaFactura.clear()
+            self.refrescarFactura()
+            self.idinformativo.set_text("Has dado de alta una factura")
+        else :
+            self.idinformativo.set_text("Tienes que seleccionar antes un cliente")
     def bajaFactura(self,widget):
         model,iter= self.idTreeFactura.get_selection().get_selected()
         nFactura=model.get_value(iter,0)

@@ -45,6 +45,41 @@ def listarc():
         print ("er.message en cliente")
         conex.rollback()
     #------FACTURA----
+        #------ComboProducto---
+def cargarCmbP(nombre):
+    try:
+        cur.execute("select * from Producto where nombre=?",(nombre,))
+        listado = cur.fetchall()
+        return listado
+    except:
+        print ("er.message en Producto")
+        conex.rollback()         
+def listarCmbP():
+    try:
+        cur.execute("select nombre from Producto")
+        listado = cur.fetchall()
+        return listado
+    except:
+        print ("er.message en Producto")
+        conex.rollback()   
+def listarV(factura):
+    try:
+        cur.execute("select * from Ventas where id_facturas=?",(factura,))
+        listado = cur.fetchall()
+        return listado
+    except:
+        print ("er.message en Ventas")
+        conex.rollback()  
+def insertarV(fila):
+    try: 
+        registro = fila
+        cur.execute("insert into Ventas(id_facturas,id_producto,cantidad,precio) values (?,?,?,?)",registro)
+        print('insertado')
+        conex.commit()
+    except:
+        print("hubo un error alta factura")
+        conex.rollback()        
+
 def insertarf(fila):
     try: 
         registro = fila
