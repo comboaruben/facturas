@@ -123,35 +123,26 @@ def bajaf(var):
         listado=cur.fetchall()
         a=0
         b=len(listado)
-        c=0
         list=[]
-        while(c<b-1):
+        while(a<b):
             c=0
-            
             list=[]
-            for row in listado:
+            while(c<3):
+               
                 list.append(listado[a][c])
                 c=c+1;
-            print(list)
             idProducto=list[0]
             stockSumar=list[1]
             idVenta=list[2]
-            print(idProducto)
-            print(stockSumar)
-            print(idVenta)
             cur.execute("select stock from Producto WHERE id_producto=?",(idProducto,))
             stockActual = cur.fetchone()
             stockReal = int(stockSumar)+int(stockActual[0])
-            print(stockActual)
-            print(stockReal)
             cur.execute("update Producto set stock=? WHERE id_producto=?", (stockReal,idProducto,))
             cur.execute("delete from Ventas where num_ventas=?",(idVenta,))
             a=a+1
         cur.execute("delete from Factura where num_factura=?",(factura,))
         conex.commit()
-    except Exception as e:
-        print(e)
-        print("ok")
+    except :
         conex.rollback()
 #-------PRODUCTO----
 def insertarp(fila):
