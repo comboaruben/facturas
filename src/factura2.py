@@ -288,7 +288,9 @@ class factura():
             Conexion.bajac(self.dni)
             self.listaClientes.clear()
             self.refrescarCliente()
+            self.dniClienteFacturacion.set_text("")
             self.idinformativo.set_text("Has dado de baja reciente a "+self.snombre+" "+self.sapellido)
+            
             Operaciones.limpiarc(self)   
     def modificarCliente(self,widget):
         self.dni = self.idDni.get_text()
