@@ -196,6 +196,7 @@ class factura():
             self.refrescarVenta()
             self.listaProducto.clear()
             self.refrescarProducto()
+            self.cmbProducto.set_model(0)
             self.idinformativo.set_text("Has dado de baja un producto de una venta")
         else:
             self.idinformativo.set_text("Primero seleccionada una venta")
