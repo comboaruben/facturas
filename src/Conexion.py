@@ -8,7 +8,14 @@ try:
 except:
     print ("Posibles errores de importacion")
   
- #-----CLIENTE-----      
+ #-----CLIENTE-----  
+def listarC(dni):
+    try:
+        cur.execute("select * from Cliente where dni=?",(dni,))
+        listado = cur.fetchall()
+        return listado
+    except:
+        print ("er.message en Ventas")
 def insertarc(fila):
     try: 
         registro = fila
@@ -65,6 +72,14 @@ def listarCmbP():
 def listarV(factura):
     try:
         cur.execute("select * from Ventas where id_facturas=?",(factura,))
+        listado = cur.fetchall()
+        return listado
+    except:
+        print ("er.message en Ventas")
+        conex.rollback() 
+def listarNombreProducto(id_producto):
+    try:
+        cur.execute("select nombre from Producto where id_producto=?",(id_producto,))
         listado = cur.fetchall()
         return listado
     except:

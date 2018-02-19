@@ -8,6 +8,7 @@ import gi
 import Conexion
 import Operaciones
 import time
+import PDF
 os.environ['UBUNTU_MENUPROXY']='0'
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -44,6 +45,7 @@ class factura():
         self.btnBorrarFactura=b.get_object("btnBorrarFactura")
         self.btnGrabarVenta=b.get_object("btnGrabarVenta")
         self.btnBorrarVenta=b.get_object("btnBorrarVenta")
+        self.btnImprimirFactura=b.get_object("btnImprimirFactura")
         #combo y listcombo
         self.cmbProducto=b.get_object("cmbProducto")
         self.listCmbProducto=b.get_object("listCmbProducto")
@@ -69,8 +71,8 @@ class factura():
         "on_btnModificar_clicked":self.modificarCliente,"on_btnIniciarFactura_clicked":self.altaFactura,"on_btnBorrarFactura_clicked":self.bajaFactura,
         "on_btnAltaProducto_clicked":self.altaProducto,"on_idTreeProducto_cursor_changed":self.cargarProducto,"on_btnModificarProducto_clicked":self.modificarProducto,
         "on_btnBajaProducto_clicked":self.bajaProducto,"on_cmbProducto_changed":self.cargaCmbProducto,
-        "on_btnGrabarVenta_clicked":self.altaVentaProducto,"on_idTreeFactura_cursor_changed":self.cargarFactura,"on_btnBorrarVenta_clicked":self.bajaVenta,}
-        
+        "on_btnGrabarVenta_clicked":self.altaVentaProducto,"on_idTreeFactura_cursor_changed":self.cargarFactura,"on_btnBorrarVenta_clicked":self.bajaVenta,
+        "on_btnImprimirFactura_clicked":self.imprimirFactura,}
         
         b.connect_signals(dic)
         self.idVentanaPrincipal.show()
@@ -83,6 +85,7 @@ class factura():
        #prueba
     
     #------------PRODUCTO------------
+    #"""Alta de un producto de la pestanha producto, controlando los campos vacio"""
     def altaProducto(self,widget):
         nombre=self.idNombreProducto.get_text()
         idPrecioProducto=self.idPrecioProducto.get_text()
@@ -98,6 +101,7 @@ class factura():
             self.idinformativo.set_text("Has dado de alta el producto "+nombre+" con un stock de "+idStockProducto)
         else :
             self.idinformativo.set_text("Has dejado algún campo vacio compruebe y prueba de nuevo")
+   # """Modificacion de un producto de la pestanha producto"""
     def modificarProducto(self,widget):
         nombre=self.idNombreProducto.get_text()
         idPrecioProducto=self.idPrecioProducto.get_text()
@@ -111,7 +115,9 @@ class factura():
             self.idinformativo.set_text("Has modificado el producto "+nombre)
         else :
             self.idinformativo.set_text("Has dejado algún campo vacio compruebe y prueba de nuevo")
+   #"""Baja de un producto de la pestanha producto"""
     def bajaProducto(self,widget):
+        
         model,iter= self.idTreeProducto.get_selection().get_selected()
         nombreProducto=model.get_value(iter,1)
         if(nombreProducto!=""):
@@ -136,6 +142,20 @@ class factura():
             self.idPrecioProducto.set_text(sprecio)
             self.idStockProducto.set_text(str(sstock))
     #-------------FACTURA------------
+    def imprimirFactura(self,widget):
+        model,iter= self.idTreeFactura.get_selection().get_selected()
+        nFactura=model.get_value(iter,0)  
+        
+        nCliente=model.get_value(iter,2)
+        print(nCliente)
+        pdf = PDF.PDF() 
+        
+        if(nCliente!=""):
+            pdf.getFactura(nFactura,nCliente)
+        else:
+             self.idinformativo.set_text("Selecciona una factura")
+            
+        
         #-----ComboProducto----------
     def cargaCmbProducto(self,widget):
         index = self.cmbProducto.get_active()

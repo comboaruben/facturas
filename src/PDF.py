@@ -2,7 +2,7 @@
 from fpdf import FPDF 
 import os
 
-import conexion
+import Conexion
 
 class PDF(FPDF):
     def header(self):
@@ -20,21 +20,22 @@ class PDF(FPDF):
         self.set_y(-15)
         self.set_font('Arial','UI',8)
         self.cell(0,6,"NIF: B0000000",0,0,'C')
-    def getFActura(selffactura,cliente):
-        pdf=PDF('PO','mm','A4')
+    def getFactura(self,factura,cliente):
+        pdf=PDF('P','mm','A4')
         pdf.alias_nb_pages()
         pdf.add_page()
         pdf.set_font('Arial','B',12)
         #nomCli,
         pdf.cell(0,8,"Factura :"+str(factura),0,1,'C')
-        detallesVenta=conexion.listav(factura)
-        detallesCliente=conexion.listacf(cliente)
-        for row in detallesCLiente:
-            pdf.cell(0,8,"DATOS CLIENTE :",0,1,'R')
-            pdf.cell(0,8,"DNI/CIF       :"+str(row[0]),0,1,'R')
-            pdf.cell(0,8,"Nombre        :"+str(row[1]),0,1,'R')
-            pdf.cell(0,8,"Dirección     :"+str(row[2])+"    Localidad :"+row[4],0,1,'R')
-            pdf.cell(0,8,"Telefono      :"+str(row[5])+"    Email     :"+row[6],0,1,'R')
+        detallesVenta=Conexion.listarV(factura)
+        detallesCliente=Conexion.listarC(cliente)
+        
+        for row in detallesCliente:
+            pdf.cell(0,8,"DATOS CLIENTE : ",0,1,'R')
+            pdf.cell(0,8,"DNI/CIF       : "+str(row[0]),0,1,'R')
+            pdf.cell(0,8,"Nombre        : "+str(row[1])+" "+str(row[2]),0,1,'R')
+            pdf.cell(0,8,"Dirección     : "+str(row[3])+"    Localidad :"+row[5],0,1,'R')
+            pdf.cell(0,8,"Telefono      : "+str(row[4])+"    Email     :"+row[6],0,1,'R')
         cabecera="Producto           Cantidad           Precio           Unitario           Precio Total"
         pdf.cell(0,40,cabecera,0,1,'C')
         pdf.line(164,50,200,50)
@@ -48,23 +49,25 @@ class PDF(FPDF):
         y=110
         for item in detallesVenta:
             pdf.set_font('Arial','',10)
-            prodnom=conexion.verprod(str([item2]))
+            prodnom=Conexion.listarNombreProducto(str(item[2]))
             cantidad="{0:.2f}".format(float(item[3]))
-            precio= float(item[4])
+            
+            precio= "{0:.2f}".format(float(item[4])/float(cantidad))
+            
             subtotalv=float(item[3])*float(item[4])
             x=20
-            pdf.tex(x,y, " | " + str(prodnom[0]))
+            pdf.text(x,y, " | " + str(prodnom[-1]))
             x=x+50
-            pdf.tex(x,y, " | " + str(cantidad))
+            pdf.text(x,y, " | " + str(cantidad))
             x=x+40
-            pdf.tex(x,y, " | " + str(precio))
+            pdf.text(x,y, " | " + str(precio))
             x=x+55
-            pdf.tex(x,y, " | " + str(subtotalv))
+            pdf.text(x,y, " | " + str(subtotalv))
             x=x+15
-            pdf.tex(x,y, " | " )
+            pdf.text(x,y, " | " )
             y=y+5
             suma=suma+subtotalv
-        iva=suma*0,21
+        iva=0.21*suma
         total=iva+suma
         suma="{0:.2f}".format(suma)
         iva="{0:.2f}".format(iva)
@@ -75,9 +78,9 @@ class PDF(FPDF):
         pdf.cell(0,7,lineatotal,1,1,'C')
         pdf.text(115,210,str(iva)+" Euros")
         pdf.text(155,210,str(total)+ "Euros")
-        archivo="dos.pdf"
+        archivo="Factura"+precio+".pdf"
         pdf.output(archivo,'F')
-        os.system("evince"+archivo)
+        os.system("evince "+archivo)
             
             
 
