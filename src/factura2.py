@@ -145,7 +145,6 @@ class factura():
     def imprimirFactura(self,widget):
         model,iter= self.idTreeFactura.get_selection().get_selected()
         nFactura=model.get_value(iter,0)  
-        
         nCliente=model.get_value(iter,2)
         print(nCliente)
         pdf = PDF.PDF() 
@@ -224,6 +223,7 @@ class factura():
     def cargarFactura(self,widget,data=None):
         model,iter= self.idTreeFactura.get_selection().get_selected()
         self.numeroFactura=model.get_value(iter,0)
+        self.idFactura.set_text(str(model.get_value(iter,0)))
         self.siClickEnFactura=0;
         self.listVentaProducto.clear()
         self.refrescarVenta()
